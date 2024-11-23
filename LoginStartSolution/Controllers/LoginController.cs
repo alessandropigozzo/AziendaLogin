@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
 using LoginStartSolution.Models;
-using LoginStartSolution.Models;
 using System.Diagnostics;
 using LoginStartSolution.Models.LoginModels;
 
