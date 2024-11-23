@@ -1,0 +1,17 @@
+﻿@model LoginStartSolution.Models.LoginModels.RegistrationViewModel
+
+@{
+    Layout = "_LayoutLogin";
+}
+
+<div class="container d-flex justify-content-center align-items-center" style="height: 100vh;">
+    <div class="text-center">
+        <h1 class="text-success">Registrazione Completata!</h1>
+        <p class="mt-3">Congratulazioni, @Model.Username! La tua registrazione è stata completata con successo.</p>
+        <p class="mt-4">Ora puoi accedere utilizzando le tue credenziali.</p>
+
+        <div class="mt-5">
+            <a asp-controller="Login" asp-action="Index" class="btn btn-primary">Vai alla Pagina Principale</a>
+        </div>
+    </div>
+</div>

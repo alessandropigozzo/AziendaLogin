@@ -29,11 +29,38 @@ namespace LoginStartSolution.Controllers
             return View();
         }
 
+        [HttpGet]
+        public IActionResult RegisterSuccess(RegistrationViewModel registerModel)
+        {
+            return View(registerModel);
+        }
+
+
         [HttpPost]
         public IActionResult Register(RegistrationViewModel registerModel)
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
+                var checkResult = CheckUtenteEsiste(registerModel);
+
+                if (checkResult.IsUsernameTaken)
+                {
+                    ModelState.AddModelError(nameof(registerModel.Username), "Lo username è già in uso.");
+                }
+                if (checkResult.IsCodiceFiscaleTaken)
+                {
+                    ModelState.AddModelError(nameof(registerModel.CodiceFiscale), "Il codice fiscale è già in uso.");
+                }
+                if (checkResult.IsEmailTaken)
+                {
+                    ModelState.AddModelError(nameof(registerModel.Email), "L'email è già in uso.");
+                }
+
+                if (!ModelState.IsValid)
+                {
+                    return View(registerModel);
+                }
+
                 var registrationEntity = new RegistrationViewModel
                 {
                     Email = registerModel.Email,
@@ -43,11 +70,32 @@ namespace LoginStartSolution.Controllers
                     Cognome = registerModel.Cognome,
                     CodiceFiscale = registerModel.CodiceFiscale
                 };
+
                 _context.Registrazione.Add(registrationEntity);
-                _context.SaveChanges(); 
-                return RedirectToAction("Index", "Login");
+                _context.SaveChanges();
+
+                return RedirectToAction("RegisterSuccess", "Login",registrationEntity);
             }
-            return View();
+
+            return View(registerModel);
+        }
+        private CheckResult CheckUtenteEsiste(RegistrationViewModel model)
+        {
+            var result = new CheckResult
+            {
+                IsUsernameTaken = _context.Registrazione.Any(r => r.Username == model.Username),
+                IsCodiceFiscaleTaken = _context.Registrazione.Any(r => r.CodiceFiscale == model.CodiceFiscale),
+                IsEmailTaken = _context.Registrazione.Any(r => r.Email == model.Email)
+            };
+
+            return result;
+        }
+
+        private class CheckResult
+        {
+            public bool IsUsernameTaken { get; set; }
+            public bool IsCodiceFiscaleTaken { get; set; }
+            public bool IsEmailTaken { get; set; }
         }
 
         [HttpPost]
@@ -61,19 +109,6 @@ namespace LoginStartSolution.Controllers
             // Logica di autenticazione qui (es. controllo dell'utente nel database)
 
             return RedirectToAction("Index", "Home"); // Reindirizza dopo il login
-        }
-
-        [HttpPost]
-        public IActionResult Index(RegistrationViewModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View(model);
-            }
-
-            // Logica di autenticazione qui (es. controllo dell'utente nel database)
-
-            return RedirectToAction("Register", "Home"); // Reindirizza dopo il login
         }
 
 
