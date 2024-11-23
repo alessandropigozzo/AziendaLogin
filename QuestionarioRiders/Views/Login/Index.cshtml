@@ -1,0 +1,40 @@
+﻿
+@model QuestionarioRiders.Models.LoginModels.LoginViewModel
+@{
+    Layout = "_LayoutLogin";
+}
+
+
+<div class="full-height">
+    <section class="w-100 d-flex justify-content-center p-2">
+        <form style="width: 18rem; max-width: 90%;">
+            <!-- Email input -->
+            <div class="form-outline mb-3">
+                <input type="email" id="Email" class="form-control" required>
+                <label class="form-label" for="Email" style="margin-left: 0px;">Email address</label>
+            </div>
+
+            <!-- Password input -->
+            <div class="form-outline mb-3">
+                <input type="password" id="Password" class="form-control" required>
+                <label class="form-label" for="Password" style="margin-left: 0px;">Password</label>
+            </div>
+
+            <!-- Remember me and Forgot password links -->
+            <div class="row mb-3">
+                <div class="col">
+                    <a href="#!">Forgot password?</a>
+                </div>
+            </div>
+
+            <!-- Submit button -->
+            <center>
+            <button type="submit" class="btn btn-primary btn-block mb-3 ">Sign in</button>
+            </center>
+            <!-- Register and social login buttons -->
+            <div class="text-center">
+                <p>Not a member? @Html.ActionLink("Register", "Register", "Login")</p>
+            </div>
+        </form>
+    </section>
+</div>

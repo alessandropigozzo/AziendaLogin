@@ -1,0 +1,61 @@
+﻿@model QuestionarioRiders.Models.LoginModels.RegistrationViewModel
+@{
+    Layout = "_LayoutLogin";
+}
+
+<div class="container-fluid d-flex justify-content-center align-items-center" style="position:relative; padding-top:100px" >
+    <div class="col-sm-4">
+        <form asp-action="Register" asp-controller="Login" method="post">
+            <!-- Email input -->
+            <div class="form-outline mb-3">
+                <label class="form-label" for="Email">Email address</label>
+                <input type="email" class="form-control" asp-for="Email" />
+                @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+            </div>
+
+            <!-- Username input -->
+            <div class="form-outline mb-3">
+                <label class="form-label" for="Username">Username</label>
+                <input type="text" class="form-control" asp-for="Username" />
+                @Html.ValidationMessageFor(model => model.Username, "", new { @class = "text-danger" })
+            </div>
+
+            <!-- Password input -->
+            <div class="form-outline mb-3">
+                <label class="form-label" for="Password">Password</label>
+                <input type="password" class="form-control" asp-for="Password" />
+                @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+            </div>
+
+            <!-- Nome input -->
+            <div class="form-outline mb-3">
+                <label class="form-label" for="Nome">Nome</label>
+                <input type="text" class="form-control" asp-for="Nome" />
+                @Html.ValidationMessageFor(model => model.Nome, "", new { @class = "text-danger" })
+            </div>
+
+            <!-- Cognome input -->
+            <div class="form-outline mb-3">
+                <label class="form-label" for="Cognome">Cognome</label>
+                <input type="text" class="form-control" asp-for="Cognome" />
+                @Html.ValidationMessageFor(model => model.Cognome, "", new { @class = "text-danger" })
+            </div>
+
+            <!-- Codice Fiscale input -->
+            <div class="form-outline mb-3">
+                <label class="form-label" for="CodiceFiscale">Codice Fiscale</label>
+                <input type="text" class="form-control" asp-for="CodiceFiscale" />
+                @Html.ValidationMessageFor(model => model.CodiceFiscale, "", new { @class = "text-danger" })
+            </div>
+
+            <!-- Submit button -->
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary btn-block">Registrati</button>
+            </div>
+        </form>
+    </div>
+ 
+</div>
+<div class="text-center mt-4">
+    <p>Non vuoi registrarti torna alla pagina iniziale @Html.ActionLink("Pagina Principale", "Index", "Login")</p>
+</div>
