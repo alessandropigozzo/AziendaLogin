@@ -7,16 +7,16 @@
 
 <div class="full-height">
     <section class="w-100 d-flex justify-content-center p-2">
-        <form style="width: 18rem; max-width: 90%;">
+        <form asp-action="Index" asp-controller="Login" method="post" style="width: 18rem; max-width: 90%;">
             <div class="form-outline mb-3">
-                <input type="text" id="Username" class="form-control" required>
                 <label class="form-label" for="Username" style="margin-left: 0px;">Username</label>
+                <input type="text" asp-for="Username" class="form-control" required>
             </div>
 
             <!-- Password input -->
             <div class="form-outline mb-3">
-                <input type="password" id="Password" class="form-control" required>
                 <label class="form-label" for="Password" style="margin-left: 0px;">Password</label>
+                <input type="password" asp-for="Password" class="form-control" required>
             </div>
 
             <!-- Remember me and Forgot password links -->
@@ -31,9 +31,11 @@
             <button type="submit" class="btn btn-primary btn-block mb-3 ">Sign in</button>
             </center>
             <!-- Register and social login buttons -->
+            <div asp-validation-summary="All" class="text-danger mt-3"></div>
             <div class="text-center">
                 <p>Not a member? @Html.ActionLink("Register", "Register", "Login")</p>
             </div>
         </form>
     </section>
 </div>
+

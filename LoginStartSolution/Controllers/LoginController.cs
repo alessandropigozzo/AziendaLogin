@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using LoginStartSolution.Models;
 using System.Diagnostics;
 using LoginStartSolution.Models.LoginModels;
+using Newtonsoft.Json;
 
 namespace LoginStartSolution.Controllers
 {
@@ -101,15 +102,40 @@ namespace LoginStartSolution.Controllers
         [HttpPost]
         public IActionResult Index(LoginViewModel model)
         {
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-                return View(model);
+                bool result = CheckPersonaDbSaveSession(model);
+                if (result)
+                {
+                    return RedirectToAction("Index", "Home");
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "Username o password non validi.");
+                }
+            }
+            return View(model); 
+        }
+
+
+        private bool CheckPersonaDbSaveSession(LoginViewModel model)
+        {
+            // Recupera l'utente dal database
+            var persona = _context.Registrazione
+                           .FirstOrDefault(x => x.Username.ToLower().Trim() == model.Username.ToLower().Trim() &&
+                                                x.Password.ToLower().Trim() == model.Password.ToLower().Trim());
+
+            if (persona != null)
+            {
+                var personaJson = JsonConvert.SerializeObject(persona);
+                HttpContext.Session.SetString("Persona", personaJson);
+
+                return true;
             }
 
-            // Logica di autenticazione qui (es. controllo dell'utente nel database)
-
-            return RedirectToAction("Index", "Home"); // Reindirizza dopo il login
+            return false;
         }
+
 
 
 
