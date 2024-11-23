@@ -1,9 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
-using QuestionarioRiders.Models;
-using QuestionarioRiders.Models.LoginModels;
+using LoginStartSolution.Models;
+using LoginStartSolution.Models;
 using System.Diagnostics;
+using LoginStartSolution.Models.LoginModels;
 
-namespace QuestionarioRiders.Controllers
+namespace LoginStartSolution.Controllers
 {
     public class LoginController : Controller
     {

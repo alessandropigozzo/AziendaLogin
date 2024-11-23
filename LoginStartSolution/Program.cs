@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using QuestionarioRiders.Models;
+using LoginStartSolution.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 

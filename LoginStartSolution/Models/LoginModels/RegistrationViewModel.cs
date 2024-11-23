@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace QuestionarioRiders.Models.LoginModels
+namespace LoginStartSolution.Models.LoginModels
 {
     public class RegistrationViewModel
     {

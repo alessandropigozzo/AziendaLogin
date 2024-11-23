@@ -1,4 +1,4 @@
-namespace QuestionarioRiders.Models
+namespace LoginStartSolution.Models
 {
     public class ErrorViewModel
     {

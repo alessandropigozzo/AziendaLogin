@@ -1,7 +1,9 @@
 using Microsoft.EntityFrameworkCore;
-using QuestionarioRiders.Models.LoginModels;
+using LoginStartSolution.Models;
+using LoginStartSolution.Models.LoginModels;
 
-namespace QuestionarioRiders.Models
+
+namespace LoginStartSolution.Models
 {
     public class ApplicationDbContext : DbContext
     {
