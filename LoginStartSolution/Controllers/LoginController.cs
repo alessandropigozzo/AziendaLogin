@@ -115,52 +115,78 @@ namespace LoginStartMenu.Controllers
         [HttpPost]
         public IActionResult Index(LoginViewModel model)
         {
-            if (ModelState.IsValid)
+            try
             {
-                bool result = CheckPersonaDbSaveSession(model);
-                if (result)
+                if (ModelState.IsValid)
                 {
-                    return RedirectToAction("Index", "Home");
-                }
-                else
-                {
-                    ModelState.AddModelError(string.Empty, "Username o password non validi.");
+                    bool result = CheckPersonaDbSaveSession(model);
+                    if (result)
+                    {
+                        return RedirectToAction("Index", "Home");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, "Username o password non validi.");
+                    }
                 }
             }
-            return View(model); 
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Errore durante il login.");
+                ModelState.AddModelError(string.Empty, "Si è verificato un errore durante l'elaborazione della richiesta.");
+            }
+            return View(model);
         }
 
 
         private bool CheckPersonaDbSaveSession(LoginViewModel model)
         {
-            Utente utente = _context.Utenti
-                           .FirstOrDefault(x => x.Username.ToLower().Trim() == model.Username.ToLower().Trim() &&
-                                                x.Password.ToLower().Trim() == model.Password.ToLower().Trim());
-            if (utente != null)
+            try
             {
-                var utenteJson = JsonConvert.SerializeObject(utente);
-                HttpContext.Session.SetString("Utente", utenteJson);
+                Utente utente = _context.Utenti
+                    .FirstOrDefault(x => x.Username.ToLower().Trim() == model.Username.ToLower().Trim() &&
+                                         x.Password.ToLower().Trim() == model.Password.ToLower().Trim());
+                if (utente != null)
+                {
+                    var utenteJson = JsonConvert.SerializeObject(utente);
+                    HttpContext.Session.SetString("Utente", utenteJson);
 
-                var utenteRuolo = _context.UtentiRuoli
-                    .Where(ur => ur.Ruolo.IdRuolo == _context.Ruoli.Min(r => r.IdRuolo)) 
-                    .Select(ur => new
+                    var utenteRuolo = _context.UtentiRuoli
+                        .Where(ur => ur.Ruolo.IdRuolo == _context.Ruoli.Min(r => r.IdRuolo))
+                        .Select(ur => new
+                        {
+                            utenteId = ur.Utente.IdUtente,
+                            ruoloId = ur.Ruolo.IdRuolo
+                        })
+                        .FirstOrDefault();
+
+                    if (utenteRuolo == null)
                     {
-                        utenteId = ur.Utente.IdUtente,
-                        ruoloId = ur.Ruolo.IdRuolo
-                    })
-                    .FirstOrDefault();
+                        throw new Exception("Nessun ruolo associato trovato per l'utente.");
+                    }
 
-                int ruoloId = utenteRuolo.ruoloId;
+                    int ruoloId = utenteRuolo.ruoloId;
 
-                Ruolo ruolo = _context.Ruoli
-                    .FirstOrDefault(r => r.IdRuolo == ruoloId);
+                    Ruolo ruolo = _context.Ruoli.FirstOrDefault(r => r.IdRuolo == ruoloId);
 
-                var ruoloJson = JsonConvert.SerializeObject(ruolo);
-                HttpContext.Session.SetString("Ruolo", ruoloJson);
-                return true;
+                    if (ruolo == null)
+                    {
+                        throw new Exception("Ruolo non trovato nel database.");
+                    }
+
+                    var ruoloJson = JsonConvert.SerializeObject(ruolo);
+                    HttpContext.Session.SetString("Ruolo", ruoloJson);
+                    return true;
+                }
+                return false;
             }
-            return false;
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Errore durante la verifica dell'utente nel database.");
+                throw;
+            }
         }
+
 
 
 
