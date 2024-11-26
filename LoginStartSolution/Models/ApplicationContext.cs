@@ -10,8 +10,26 @@ namespace LoginStartMenu.Models
         {
         }
 
-        public DbSet<Utente> Utente { get; set; }
-        public DbSet<Ruolo> Ruolo { get; set; }
+        public DbSet<Utente> Utenti { get; set; }
+        public DbSet<Ruolo> Ruoli { get; set; }
+        public DbSet<UtenteRuolo> UtentiRuoli { get; set; }
+
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            // Configurazione della relazione molti-a-molti
+            modelBuilder.Entity<UtenteRuolo>()
+                .HasOne(ur => ur.Utente)
+                .WithMany(u => u.UtentiRuoli)
+                .HasForeignKey(ur => ur.IdUtente);
+
+            modelBuilder.Entity<UtenteRuolo>()
+                .HasOne(ur => ur.Ruolo)
+                .WithMany(r => r.UtentiRuoli)
+                .HasForeignKey(ur => ur.IdRuolo);
+        }
     }
 
 }

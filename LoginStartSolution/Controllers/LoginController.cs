@@ -73,8 +73,20 @@ namespace LoginStartMenu.Controllers
                     CodiceFiscale = registerModel.CodiceFiscale
                 };
 
-                _context.Utente.Add(registrationEntity);
+                _context.Utenti.Add(registrationEntity);
                 _context.SaveChanges();
+
+                Utente utenteDb = _context.Utenti.Where(x=>x.CodiceFiscale.Equals(registrationEntity.CodiceFiscale)).FirstOrDefault();
+                if (utenteDb != null)
+                {
+                    var utentiRuoli = new UtenteRuolo
+                    {
+                        IdUtente = utenteDb.IdUtente,
+                        IdRuolo = 2,
+                    };
+                    _context.UtentiRuoli.Add(utentiRuoli);
+                    _context.SaveChanges();
+                }
 
                 return RedirectToAction("RegisterSuccess", "Login",registrationEntity);
             }
@@ -85,9 +97,9 @@ namespace LoginStartMenu.Controllers
         {
             var result = new CheckResult
             {
-                IsUsernameTaken = _context.Utente.Any(r => r.Username == model.Username),
-                IsCodiceFiscaleTaken = _context.Utente.Any(r => r.CodiceFiscale == model.CodiceFiscale),
-                IsEmailTaken = _context.Utente.Any(r => r.Email == model.Email)
+                IsUsernameTaken = _context.Utenti.Any(r => r.Username == model.Username),
+                IsCodiceFiscaleTaken = _context.Utenti.Any(r => r.CodiceFiscale == model.CodiceFiscale),
+                IsEmailTaken = _context.Utenti.Any(r => r.Email == model.Email)
             };
 
             return result;
@@ -121,37 +133,32 @@ namespace LoginStartMenu.Controllers
 
         private bool CheckPersonaDbSaveSession(LoginViewModel model)
         {
-            // Recupera l'utente dal database
-            var utente = _context.Utente
+            Utente utente = _context.Utenti
                            .FirstOrDefault(x => x.Username.ToLower().Trim() == model.Username.ToLower().Trim() &&
                                                 x.Password.ToLower().Trim() == model.Password.ToLower().Trim());
-
-            string[] splitRuoli = utente.RuoliAssegnati?.Split('|') ?? new string[] { }; 
-
-            if (splitRuoli.Length > 0)
-            {
-                foreach (var item in splitRuoli)
-                {
-                    if (!string.IsNullOrWhiteSpace(item))
-                    {
-                        Console.WriteLine(item.Trim());
-                    }
-                }
-            }
-            else
-            {
-                Console.WriteLine("Nessun ruolo assegnato.");
-            }
-
-
             if (utente != null)
             {
                 var utenteJson = JsonConvert.SerializeObject(utente);
                 HttpContext.Session.SetString("Utente", utenteJson);
 
+                var utenteRuolo = _context.UtentiRuoli
+                    .Where(ur => ur.Ruolo.IdRuolo == _context.Ruoli.Min(r => r.IdRuolo)) 
+                    .Select(ur => new
+                    {
+                        utenteId = ur.Utente.IdUtente,
+                        ruoloId = ur.Ruolo.IdRuolo
+                    })
+                    .FirstOrDefault();
+
+                int ruoloId = utenteRuolo.ruoloId;
+
+                Ruolo ruolo = _context.Ruoli
+                    .FirstOrDefault(r => r.IdRuolo == ruoloId);
+
+                var ruoloJson = JsonConvert.SerializeObject(ruolo);
+                HttpContext.Session.SetString("Ruolo", ruoloJson);
                 return true;
             }
-
             return false;
         }
 
