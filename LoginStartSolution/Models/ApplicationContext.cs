@@ -1,9 +1,8 @@
 using Microsoft.EntityFrameworkCore;
-using LoginStartSolution.Models;
-using LoginStartSolution.Models.LoginModels;
+using LoginStartMenu.Models.Entity;
 
 
-namespace LoginStartSolution.Models
+namespace LoginStartMenu.Models
 {
     public class ApplicationDbContext : DbContext
     {
@@ -11,7 +10,8 @@ namespace LoginStartSolution.Models
         {
         }
 
-        public DbSet<RegistrationViewModel> Registrazione { get; set; }
+        public DbSet<Utente> Utente { get; set; }
+        public DbSet<Ruolo> Ruolo { get; set; }
     }
 
 }

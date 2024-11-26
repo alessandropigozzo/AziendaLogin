@@ -1,10 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
-using LoginStartSolution.Models;
+using LoginStartMenu.Models;
 using System.Diagnostics;
-using LoginStartSolution.Models.LoginModels;
 using Newtonsoft.Json;
+using LoginStartMenu.Models.Entity;
 
-namespace LoginStartSolution.Controllers
+namespace LoginStartMenu.Controllers
 {
     public class HomeController : Controller
     {
@@ -21,11 +21,11 @@ namespace LoginStartSolution.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-            var personaJson = HttpContext.Session.GetString("Persona");
-            if (!string.IsNullOrEmpty(personaJson))
+            var utenteJson = HttpContext.Session.GetString("Utente");
+            if (!string.IsNullOrEmpty(utenteJson))
             {
-                var persona = JsonConvert.DeserializeObject<RegistrationViewModel>(personaJson);
-                return View(persona);
+                var utente = JsonConvert.DeserializeObject<Utente>(utenteJson);
+                return View(utente);
             }
             return View();
         }

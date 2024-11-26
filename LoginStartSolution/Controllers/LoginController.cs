@@ -1,10 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
-using LoginStartSolution.Models;
 using System.Diagnostics;
-using LoginStartSolution.Models.LoginModels;
 using Newtonsoft.Json;
+using LoginStartMenu.Models.Entity;
+using LoginStartMenu.Models;
+using LoginStartMenu.Models.LoginModels;
 
-namespace LoginStartSolution.Controllers
+namespace LoginStartMenu.Controllers
 {
     public class LoginController : Controller
     {
@@ -62,7 +63,7 @@ namespace LoginStartSolution.Controllers
                     return View(registerModel);
                 }
 
-                var registrationEntity = new RegistrationViewModel
+                var registrationEntity = new Utente
                 {
                     Email = registerModel.Email,
                     Username = registerModel.Username,
@@ -72,7 +73,7 @@ namespace LoginStartSolution.Controllers
                     CodiceFiscale = registerModel.CodiceFiscale
                 };
 
-                _context.Registrazione.Add(registrationEntity);
+                _context.Utente.Add(registrationEntity);
                 _context.SaveChanges();
 
                 return RedirectToAction("RegisterSuccess", "Login",registrationEntity);
@@ -84,9 +85,9 @@ namespace LoginStartSolution.Controllers
         {
             var result = new CheckResult
             {
-                IsUsernameTaken = _context.Registrazione.Any(r => r.Username == model.Username),
-                IsCodiceFiscaleTaken = _context.Registrazione.Any(r => r.CodiceFiscale == model.CodiceFiscale),
-                IsEmailTaken = _context.Registrazione.Any(r => r.Email == model.Email)
+                IsUsernameTaken = _context.Utente.Any(r => r.Username == model.Username),
+                IsCodiceFiscaleTaken = _context.Utente.Any(r => r.CodiceFiscale == model.CodiceFiscale),
+                IsEmailTaken = _context.Utente.Any(r => r.Email == model.Email)
             };
 
             return result;
@@ -121,14 +122,32 @@ namespace LoginStartSolution.Controllers
         private bool CheckPersonaDbSaveSession(LoginViewModel model)
         {
             // Recupera l'utente dal database
-            var persona = _context.Registrazione
+            var utente = _context.Utente
                            .FirstOrDefault(x => x.Username.ToLower().Trim() == model.Username.ToLower().Trim() &&
                                                 x.Password.ToLower().Trim() == model.Password.ToLower().Trim());
 
-            if (persona != null)
+            string[] splitRuoli = utente.RuoliAssegnati?.Split('|') ?? new string[] { }; 
+
+            if (splitRuoli.Length > 0)
             {
-                var personaJson = JsonConvert.SerializeObject(persona);
-                HttpContext.Session.SetString("Persona", personaJson);
+                foreach (var item in splitRuoli)
+                {
+                    if (!string.IsNullOrWhiteSpace(item))
+                    {
+                        Console.WriteLine(item.Trim());
+                    }
+                }
+            }
+            else
+            {
+                Console.WriteLine("Nessun ruolo assegnato.");
+            }
+
+
+            if (utente != null)
+            {
+                var utenteJson = JsonConvert.SerializeObject(utente);
+                HttpContext.Session.SetString("Utente", utenteJson);
 
                 return true;
             }

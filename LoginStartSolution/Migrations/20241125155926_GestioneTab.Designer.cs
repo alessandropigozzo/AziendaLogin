@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LoginStartMenu.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241123103603_Inizializzazione")]
-    partial class Inizializzazione
+    [Migration("20241125155926_GestioneTab")]
+    partial class GestioneTab
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,13 +24,13 @@ namespace LoginStartMenu.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("LoginStartSolution.Models.LoginModels.RegistrationViewModel", b =>
+            modelBuilder.Entity("LoginStartMenu.Models.Entity.Utente", b =>
                 {
-                    b.Property<int>("IdPersona")
+                    b.Property<int>("IdUtente")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdPersona"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdUtente"));
 
                     b.Property<string>("CodiceFiscale")
                         .IsRequired()
@@ -56,9 +56,9 @@ namespace LoginStartMenu.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("IdPersona");
+                    b.HasKey("IdUtente");
 
-                    b.ToTable("Registrazione");
+                    b.ToTable("Utente");
                 });
 #pragma warning restore 612, 618
         }

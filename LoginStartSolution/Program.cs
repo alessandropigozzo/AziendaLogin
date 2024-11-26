@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using LoginStartSolution.Models;
+using LoginStartMenu.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 

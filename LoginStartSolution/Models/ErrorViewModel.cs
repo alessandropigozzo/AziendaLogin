@@ -1,4 +1,4 @@
-namespace LoginStartSolution.Models
+namespace LoginStartMenu.Models
 {
     public class ErrorViewModel
     {
