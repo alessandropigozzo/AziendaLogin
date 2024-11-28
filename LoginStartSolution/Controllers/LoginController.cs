@@ -143,6 +143,9 @@ namespace LoginStartMenu.Controllers
         {
             try
             {
+                HttpContext.Session.SetString("Utente", "");
+                HttpContext.Session.SetString("Ruolo", "");
+
                 Utente utente = _context.Utenti
                     .FirstOrDefault(x => x.Username.ToLower().Trim() == model.Username.ToLower().Trim() &&
                                          x.Password.ToLower().Trim() == model.Password.ToLower().Trim());
@@ -151,8 +154,13 @@ namespace LoginStartMenu.Controllers
                     var utenteJson = JsonConvert.SerializeObject(utente);
                     HttpContext.Session.SetString("Utente", utenteJson);
 
+                    var ruoloMinimoId = _context.UtentiRuoli
+                    .Where(x => x.IdUtente == utente.IdUtente)
+                    .Min(x => x.Ruolo.IdRuolo);
+
+                    // Trova l'utente-ruolo corrispondente al ruolo minimo
                     var utenteRuolo = _context.UtentiRuoli
-                        .Where(ur => ur.Ruolo.IdRuolo == _context.Ruoli.Min(r => r.IdRuolo))
+                        .Where(x => x.IdUtente == utente.IdUtente && x.Ruolo.IdRuolo == ruoloMinimoId)
                         .Select(ur => new
                         {
                             utenteId = ur.Utente.IdUtente,

@@ -1,10 +1,18 @@
-﻿@model LoginStartMenu.Models.Entity.Utente
+﻿@model LoginStartMenu.Models.Collection.AccessoUtente
+
 @{
-    Layout = "_Layout";
+    Layout = Model.ruolo.IdRuolo == 1 ? "_LayoutAdmin" : "_LayoutDipendente";
 }
 
 
-<div class="container">
-    <h1>Benvenuto, @Model.Username!</h1>
-    <p>Siamo felici di averti qui.</p>
-</div>
+@if(Model.ruolo.IdRuolo == 1)
+{
+    @Html.Partial("~/Views/Shared/HomePartial/AdminPartial.cshtml", Model)
+
+
+}
+else
+{
+    @Html.Partial("~/Views/Shared/HomePartial/DipendentePartial.cshtml", Model)
+
+}

@@ -3,6 +3,7 @@ using LoginStartMenu.Models;
 using System.Diagnostics;
 using Newtonsoft.Json;
 using LoginStartMenu.Models.Entity;
+using LoginStartMenu.Models.Collection;
 
 namespace LoginStartMenu.Controllers
 {
@@ -22,10 +23,14 @@ namespace LoginStartMenu.Controllers
         public IActionResult Index()
         {
             var utenteJson = HttpContext.Session.GetString("Utente");
-            if (!string.IsNullOrEmpty(utenteJson))
-            {
+            var ruoloJson = HttpContext.Session.GetString("Ruolo");
+            if (!string.IsNullOrEmpty(utenteJson)){
                 var utente = JsonConvert.DeserializeObject<Utente>(utenteJson);
-                return View(utente);
+                var ruolo = JsonConvert.DeserializeObject<Ruolo>(ruoloJson);
+                AccessoUtente accesso = new AccessoUtente();
+                accesso.utente = utente;
+                accesso.ruolo = ruolo;
+                return View(accesso);
             }
             return View();
         }
