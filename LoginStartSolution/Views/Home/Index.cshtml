@@ -4,15 +4,11 @@
     Layout = Model.ruolo.IdRuolo == 1 ? "_LayoutAdmin" : "_LayoutDipendente";
 }
 
-
-@if(Model.ruolo.IdRuolo == 1)
+@if (Model.ruolo.IdRuolo == 1)
 {
     @Html.Partial("~/Views/Shared/HomePartial/AdminPartial.cshtml", Model)
-
-
 }
 else
 {
     @Html.Partial("~/Views/Shared/HomePartial/DipendentePartial.cshtml", Model)
-
 }

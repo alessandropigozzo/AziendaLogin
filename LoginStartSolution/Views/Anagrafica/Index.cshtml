@@ -1,0 +1,18 @@
+﻿@model LoginStartMenu.Models.Collection.AccessoUtente
+
+@{
+    Layout = Model.ruolo.IdRuolo == 1 ? "_LayoutAdmin" : "_LayoutDipendente";
+}
+
+
+@if(Model.ruolo.IdRuolo == 1)
+{
+    @Html.Partial("~/Views/Shared/AnagraficaPartial/AdminPartialRicercaAnagrafica.cshtml", Model)
+
+
+}
+else
+{
+    @Html.Partial("~/Views/Shared/AnagraficaPartial/DipendentePartialRicercaAnagrafica.cshtml", Model)
+
+}
