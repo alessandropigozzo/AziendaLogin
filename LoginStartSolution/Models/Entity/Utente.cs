@@ -18,6 +18,10 @@ namespace LoginStartMenu.Models.Entity
 
         // Navigazione inversa per la relazione molti-a-molti
         public ICollection<UtenteRuolo> UtentiRuoli { get; set; }
+        public ICollection<UtenteAnagrafica> UtentiAnagrafiche { get; set; }
+        public ICollection<UtenteImmagine> UtentiImmagini { get; set; }
+
+
     }
 
 }
