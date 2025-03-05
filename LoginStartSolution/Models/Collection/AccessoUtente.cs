@@ -1,4 +1,5 @@
-﻿using LoginStartMenu.Models.Entity;
+﻿
+using LoginStartMenu.Models.Entity;
 
 namespace LoginStartMenu.Models.Collection
 {

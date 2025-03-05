@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LoginStartMenu.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250303211734_Aggiunta-Anagrafica-Immagine")]
-    partial class AggiuntaAnagraficaImmagine
+    [Migration("20250305214342_iniziale5")]
+    partial class iniziale5
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -52,7 +52,7 @@ namespace LoginStartMenu.Migrations
 
                     b.HasKey("IdAnagrafica");
 
-                    b.ToTable("Anagrafica");
+                    b.ToTable("Anagrafiche");
                 });
 
             modelBuilder.Entity("LoginStartMenu.Models.Entity.Immagine", b =>
@@ -64,26 +64,26 @@ namespace LoginStartMenu.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdImmagine"));
 
                     b.Property<string>("Img1")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Img2")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Img3")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("IdImmagine");
 
-                    b.ToTable("Immagine");
+                    b.ToTable("Immagini");
                 });
 
             modelBuilder.Entity("LoginStartMenu.Models.Entity.Ruolo", b =>
                 {
                     b.Property<int>("IdRuolo")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdRuolo"));
 
                     b.Property<string>("NomeRuolo")
                         .IsRequired()
@@ -114,6 +114,12 @@ namespace LoginStartMenu.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("IdAnagrafica")
+                        .HasColumnType("int");
+
+                    b.Property<int>("IdImmagine")
+                        .HasColumnType("int");
+
                     b.Property<string>("Nome")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -128,53 +134,13 @@ namespace LoginStartMenu.Migrations
 
                     b.HasKey("IdUtente");
 
+                    b.HasIndex("IdAnagrafica")
+                        .IsUnique();
+
+                    b.HasIndex("IdImmagine")
+                        .IsUnique();
+
                     b.ToTable("Utenti");
-                });
-
-            modelBuilder.Entity("LoginStartMenu.Models.Entity.UtenteAnagrafica", b =>
-                {
-                    b.Property<int>("IdUtenteAnagrafica")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdUtenteAnagrafica"));
-
-                    b.Property<int>("IdAnagrafica")
-                        .HasColumnType("int");
-
-                    b.Property<int>("IdUtente")
-                        .HasColumnType("int");
-
-                    b.HasKey("IdUtenteAnagrafica");
-
-                    b.HasIndex("IdAnagrafica");
-
-                    b.HasIndex("IdUtente");
-
-                    b.ToTable("UtenteAnagrafica");
-                });
-
-            modelBuilder.Entity("LoginStartMenu.Models.Entity.UtenteImmagine", b =>
-                {
-                    b.Property<int>("IdUtenteImmagine")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdUtenteImmagine"));
-
-                    b.Property<int>("IdImmagine")
-                        .HasColumnType("int");
-
-                    b.Property<int>("IdUtente")
-                        .HasColumnType("int");
-
-                    b.HasKey("IdUtenteImmagine");
-
-                    b.HasIndex("IdImmagine");
-
-                    b.HasIndex("IdUtente");
-
-                    b.ToTable("UtenteImmagine");
                 });
 
             modelBuilder.Entity("LoginStartMenu.Models.Entity.UtenteRuolo", b =>
@@ -200,42 +166,23 @@ namespace LoginStartMenu.Migrations
                     b.ToTable("UtentiRuoli");
                 });
 
-            modelBuilder.Entity("LoginStartMenu.Models.Entity.UtenteAnagrafica", b =>
+            modelBuilder.Entity("LoginStartMenu.Models.Entity.Utente", b =>
                 {
                     b.HasOne("LoginStartMenu.Models.Entity.Anagrafica", "Anagrafica")
-                        .WithMany("UtentiAnagrafiche")
-                        .HasForeignKey("IdAnagrafica")
+                        .WithOne("Utente")
+                        .HasForeignKey("LoginStartMenu.Models.Entity.Utente", "IdAnagrafica")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("LoginStartMenu.Models.Entity.Utente", "Utente")
-                        .WithMany("UtentiAnagrafiche")
-                        .HasForeignKey("IdUtente")
+                    b.HasOne("LoginStartMenu.Models.Entity.Immagine", "Immagine")
+                        .WithOne("Utente")
+                        .HasForeignKey("LoginStartMenu.Models.Entity.Utente", "IdImmagine")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Anagrafica");
 
-                    b.Navigation("Utente");
-                });
-
-            modelBuilder.Entity("LoginStartMenu.Models.Entity.UtenteImmagine", b =>
-                {
-                    b.HasOne("LoginStartMenu.Models.Entity.Immagine", "Immagine")
-                        .WithMany("UtentiImmagini")
-                        .HasForeignKey("IdImmagine")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("LoginStartMenu.Models.Entity.Utente", "Utente")
-                        .WithMany("UtentiImmagini")
-                        .HasForeignKey("IdUtente")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Immagine");
-
-                    b.Navigation("Utente");
                 });
 
             modelBuilder.Entity("LoginStartMenu.Models.Entity.UtenteRuolo", b =>
@@ -259,12 +206,14 @@ namespace LoginStartMenu.Migrations
 
             modelBuilder.Entity("LoginStartMenu.Models.Entity.Anagrafica", b =>
                 {
-                    b.Navigation("UtentiAnagrafiche");
+                    b.Navigation("Utente")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("LoginStartMenu.Models.Entity.Immagine", b =>
                 {
-                    b.Navigation("UtentiImmagini");
+                    b.Navigation("Utente")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("LoginStartMenu.Models.Entity.Ruolo", b =>
@@ -274,10 +223,6 @@ namespace LoginStartMenu.Migrations
 
             modelBuilder.Entity("LoginStartMenu.Models.Entity.Utente", b =>
                 {
-                    b.Navigation("UtentiAnagrafiche");
-
-                    b.Navigation("UtentiImmagini");
-
                     b.Navigation("UtentiRuoli");
                 });
 #pragma warning restore 612, 618

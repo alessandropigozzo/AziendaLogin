@@ -1,14 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LoginStartMenu.Models.Entity
 {
     public class Utente
     {
-
         [Key]
         public int IdUtente { get; set; }
-
         public string Email { get; set; }
         public string Username { get; set; }
         public string Password { get; set; }
@@ -16,12 +13,13 @@ namespace LoginStartMenu.Models.Entity
         public string Cognome { get; set; }
         public string CodiceFiscale { get; set; }
 
-        // Navigazione inversa per la relazione molti-a-molti
-        public ICollection<UtenteRuolo> UtentiRuoli { get; set; }
-        public ICollection<UtenteAnagrafica> UtentiAnagrafiche { get; set; }
-        public ICollection<UtenteImmagine> UtentiImmagini { get; set; }
+        // Relazioni
+        public int IdAnagrafica { get; set; }
+        public Anagrafica Anagrafica { get; set; }  // Relazione uno a uno con Anagrafica
 
+        public int IdImmagine { get; set; }
+        public Immagine Immagine { get; set; }  // Relazione uno a uno con Immagine
 
+        public ICollection<UtenteRuolo> UtentiRuoli { get; set; }  // Relazione molti a molti con Ruolo tramite UtenteRuolo
     }
-
 }

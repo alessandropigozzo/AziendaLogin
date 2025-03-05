@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using Newtonsoft.Json;
-using LoginStartMenu.Models.Entity;
 using LoginStartMenu.Models;
 using LoginStartMenu.Models.LoginModels;
+using LoginStartMenu.Models.Entity;
 
 namespace LoginStartMenu.Controllers
 {
@@ -63,6 +63,22 @@ namespace LoginStartMenu.Controllers
                     return View(registerModel);
                 }
 
+                var AnagraficaEntity = new Anagrafica
+                {
+                    Nazionalita = "Italiana",
+                    Eta = 30,
+                    Via = "Via Roma",
+                    Indirizzo = "1",
+                    Cap = 12345
+                };
+
+                var immagineEntity = new Immagine
+                {
+                    Img1 = "img1",
+                    Img2 = "img2",
+                    Img3 = "img3",
+                };
+
                 var registrationEntity = new Utente
                 {
                     Email = registerModel.Email,
@@ -70,29 +86,50 @@ namespace LoginStartMenu.Controllers
                     Password = registerModel.Password,
                     Nome = registerModel.Nome,
                     Cognome = registerModel.Cognome,
-                    CodiceFiscale = registerModel.CodiceFiscale
+                    CodiceFiscale = registerModel.CodiceFiscale,
+                    Anagrafica = AnagraficaEntity,
+                    Immagine = immagineEntity
                 };
 
                 _context.Utenti.Add(registrationEntity);
                 _context.SaveChanges();
 
-                Utente utenteDb = _context.Utenti.Where(x=>x.CodiceFiscale.Equals(registrationEntity.CodiceFiscale)).FirstOrDefault();
-                if (utenteDb != null)
+                // Verifica se il ruolo con IdRuolo = 2 esiste
+                var ruolo = _context.Ruoli.FirstOrDefault(r => r.IdRuolo == 2);
+
+                if (ruolo == null)
+                {
+                    // Se il ruolo non esiste, crea un nuovo ruolo
+                    ruolo = new Ruolo
+                    {
+                        IdRuolo = 2,  // Se l'IdRuolo è manuale, impostalo esplicitamente
+                        NomeRuolo = "Admin" // Imposta il nome del ruolo
+                    };
+
+                    _context.Ruoli.Add(ruolo);
+                    _context.SaveChanges();
+                }
+
+                // Associa l'utente al ruolo
+                Utente utenteDb = _context.Utenti.Where(x => x.CodiceFiscale.Equals(registrationEntity.CodiceFiscale)).FirstOrDefault();
+                if (utenteDb != null && ruolo != null)
                 {
                     var utentiRuoli = new UtenteRuolo
                     {
                         IdUtente = utenteDb.IdUtente,
-                        IdRuolo = 2,
+                        IdRuolo = ruolo.IdRuolo // Associa il ruolo
                     };
+
                     _context.UtentiRuoli.Add(utentiRuoli);
                     _context.SaveChanges();
                 }
 
-                return RedirectToAction("RegisterSuccess", "Login",registrationEntity);
+                return RedirectToAction("RegisterSuccess", "Login", registrationEntity);
             }
 
             return View(registerModel);
         }
+
         private CheckResult CheckUtenteEsiste(RegistrationViewModel model)
         {
             var result = new CheckResult
