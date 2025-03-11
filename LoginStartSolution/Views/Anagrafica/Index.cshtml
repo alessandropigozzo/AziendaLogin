@@ -7,12 +7,21 @@
 
 @if(Model.ruolo.IdRuolo == 1)
 {
+    @section Styles {
+        <link rel="stylesheet" href="~/css/Anagrafica/AdminPartialRicercaAnagrafica.css" />
+    }
+
+
     @Html.Partial("~/Views/Shared/AnagraficaPartial/AdminPartialRicercaAnagrafica.cshtml", Model)
 
 
 }
 else
 {
+    @section Styles {
+        <link rel="stylesheet" href="~/css/Anagrafica/DipendentePartialRicercaAnagrafica.css" />
+    }
+
     @Html.Partial("~/Views/Shared/AnagraficaPartial/DipendentePartialRicercaAnagrafica.cshtml", Model)
 
 }
