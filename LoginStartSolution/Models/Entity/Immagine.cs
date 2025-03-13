@@ -6,9 +6,9 @@ namespace LoginStartMenu.Models.Entity
     {
         [Key]
         public int IdImmagine { get; set; }
-        public string Img1 { get; set; }
-        public string Img2 { get; set; }
-        public string Img3 { get; set; }
+        public byte[]? Img1 { get; set; } // Salva l'immagine in formato binario
+        public byte[]? Img2 { get; set; }
+        public byte[]? Img3 { get; set; }
 
         public Utente Utente { get; set; }
     }

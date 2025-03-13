@@ -21,4 +21,9 @@
     <None Include="wwwroot\img\imglogo.jpeg" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Views\Shared\Components\Cards\" />
+    <Folder Include="Views\Shared\Components\Navigation\" />
+  </ItemGroup>
+
 </Project>

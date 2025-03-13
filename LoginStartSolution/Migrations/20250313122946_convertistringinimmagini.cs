@@ -5,7 +5,7 @@
 namespace LoginStartMenu.Migrations
 {
     /// <inheritdoc />
-    public partial class iniziale5 : Migration
+    public partial class convertistringinimmagini : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -33,9 +33,9 @@ namespace LoginStartMenu.Migrations
                 {
                     IdImmagine = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Img1 = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Img2 = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Img3 = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Img1 = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
+                    Img2 = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
+                    Img3 = table.Column<byte[]>(type: "varbinary(max)", nullable: true)
                 },
                 constraints: table =>
                 {

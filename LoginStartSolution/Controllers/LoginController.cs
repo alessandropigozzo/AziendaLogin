@@ -74,9 +74,9 @@ namespace LoginStartMenu.Controllers
 
                 var immagineEntity = new Immagine
                 {
-                    Img1 = "img1",
-                    Img2 = "img2",
-                    Img3 = "img3",
+                    Img1 = null,
+                    Img2 = null,
+                    Img3 = null,
                 };
 
                 var registrationEntity = new Utente

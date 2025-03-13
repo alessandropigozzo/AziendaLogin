@@ -1,0 +1,31 @@
+﻿@model LoginStartMenu.Models.Entity.Immagine  
+<div style="width: 250px; height: auto; border: 1px solid #ccc; border-radius: 10px; padding: 10px; text-align: center; box-shadow: 2px 2px 5px rgba(0,0,0,0.2);">
+    <h4>Immagini utente</h4>
+
+    @if (Model.Img1 != null)
+    {
+        <img src="data:image/jpeg;base64,@Convert.ToBase64String(Model.Img1)" alt="Immagine 1" style="width: 100%; height: 150px; object-fit: cover; margin-bottom: 5px;">
+    }
+    else
+    {
+        <p>Immagine 1 non disponibile</p>
+    }
+
+    @if (Model.Img2 != null)
+    {
+        <img src="data:image/jpeg;base64,@Convert.ToBase64String(Model.Img2)" alt="Immagine 2" style="width: 100%; height: 150px; object-fit: cover; margin-bottom: 5px;">
+    }
+    else
+    {
+        <p>Immagine 2 non disponibile</p>
+    }
+
+    @if (Model.Img3 != null)
+    {
+        <img src="data:image/jpeg;base64,@Convert.ToBase64String(Model.Img3)" alt="Immagine 3" style="width: 100%; height: 150px; object-fit: cover;">
+    }
+    else
+    {
+        <p>Immagine 3 non disponibile</p>
+    }
+</div>

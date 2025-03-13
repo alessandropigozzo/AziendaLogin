@@ -1,3 +1,5 @@
-﻿<div class="container">
-    ricerca anagrafica admin
+﻿@model LoginStartMenu.Models.Collection.AccessoUtente
+
+<div class="container">
+    @await Component.InvokeAsync("ImageBox", new { userId = Model.utente.IdUtente })
 </div>
