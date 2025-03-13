@@ -1,36 +1,107 @@
-﻿.container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    height: 100px;
-    padding: 20px;
-    background-color: #f4f4f4;
+﻿/* Stili generali per il contenitore */
+.profile {
+    background-color: #f7f7f7; /* Colore di sfondo */
+    padding: 20px; /* Spaziatura interna */
+    border-radius: 8px; /* Angoli arrotondati */
+    display: flex; /* Flexbox per l'allineamento */
+    align-items: center; /* Allineamento verticale al centro */
+    height:100px;
 }
 
+/* Stile per il nome e cognome */
 .name {
-    font-size: 1.25rem;
-    line-height: 2.5rem;
-    font-family: Poppins, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-    font-weight: bold;
-    flex: 1;
-    white-space: nowrap;
+    font-size: 24px; /* Dimensione del font */
+    font-weight: bold; /* Grassetto */
+    margin-right: auto; /* Allinea il testo a sinistra */
 }
 
+/* Stili per le icone social */
 .social-icons {
-    flex: 1;
-    text-align: right;
+    display: flex; /* Flex per allineare le icone */
+    gap: 30px; /* Spazio tra le icone */
 }
 
-    .social-icons a {
-        margin-left: 15px;
-        text-decoration: none;
-        color: #333;
-        font-size: 20px;
-        opacity: 0.6;
-        transition: opacity 0.3s ease, color 0.3s ease;
+    /* Stile per le icone */
+    .social-icons i {
+        color: #888; /* Colore del testo delle icone */
+        font-size: 20px; /* Dimensione delle icone */
+        transition: color 0.3s; /* Transizione dolce per il colore */
     }
 
-        .social-icons a:hover {
-            color: #000;
-            opacity: 1;
+        /* Effetto hover per le icone */
+        .social-icons i:hover {
+            color: #000; /* Colore al passaggio del mouse */
         }
+
+
+
+
+
+.image {
+    display: flex;
+    justify-content: flex-start; /* Allinea a sinistra */
+    align-items: center;
+    background: rgb(0,21,36);
+    background: linear-gradient(90deg, rgba(0,21,36,0.87718837535014) 0%, rgba(132,201,219,1) 23%, rgba(55,92,134,1) 100%);
+    width: 100%;
+    position: relative; /* Imposta una posizione relativa */
+}
+
+.image-box {
+    width: 250px;
+    height: 200px;
+    border: 3px solid #fff;
+    background-color: #e7e7e7;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    transform: translateY(20%); /* Fa uscire l'immagine dalla parte inferiore */
+    margin-left: 5%; /* Sposta verso sinistra */
+    border-radius:5%;
+}
+
+
+
+
+
+
+
+/* Style for the menu */
+.menu {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+i {
+    padding-right:5px;
+    opacity:0.4;
+}
+
+    .menu li {
+        padding: 10px;
+        margin: 5px 0;
+        background-color: #f0f0f0; /* Default background color */
+        transition: background-color 0.3s ease;
+        
+    }
+
+        .menu li a {
+            text-decoration: none;
+            color: #000; /* Text color */
+            display: block;
+        }
+
+        .menu li:hover {
+            background-color: #84bddb; /* Change background to orange on hover */
+        }
+
+
+
+
+
+
+
+
+
