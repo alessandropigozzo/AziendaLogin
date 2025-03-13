@@ -7,6 +7,7 @@ using Microsoft.Data.SqlClient;
 using System;
 using System.Data.SqlClient;
 using System.IO;
+using LoginStartMenu.Models.Collection;
 
 
 namespace LoginStartMenu.Controllers
@@ -61,31 +62,28 @@ namespace LoginStartMenu.Controllers
             if (!string.IsNullOrEmpty(accessoJson))
             {
                 var accesso = JsonConvert.DeserializeObject<AccessoUtente>(accessoJson);
+                var utenti = _context.Utenti.ToList();
+                ViewBag.utentiList = utenti;
+               
                 return View(accesso);
             }
             return RedirectToAction("Index", "Login");
         }
 
         [HttpPost]
-        public IActionResult UploadImage(IFormFile file)
+        public IActionResult UploadImage(IFormFile file, string user, string imageField)
         {
             if (file != null && file.Length > 0)
             {
-                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/img", file.FileName);
+                // Salvataggio del file fisico nella cartella 'wwwroot/img'
+                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "img", file.FileName);
                 using (var stream = new FileStream(filePath, FileMode.Create))
                 {
                     file.CopyTo(stream);
                 }
 
-                string connectionString = _configuration.GetConnectionString("DefaultConnection");
-
-                var accessoJson = HttpContext.Session.GetString("AccessoUtente");
-                var accesso = JsonConvert.DeserializeObject<AccessoUtente>(accessoJson);
-                var idImmagine = accesso.utente.IdImmagine; 
-
+                // Leggere il file come array di byte
                 byte[] imageData;
-
-                // Leggi l'immagine come array di byte
                 using (var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read))
                 {
                     using (var binaryReader = new BinaryReader(fileStream))
@@ -94,15 +92,41 @@ namespace LoginStartMenu.Controllers
                     }
                 }
 
-                using (SqlConnection connection = new SqlConnection(connectionString))
+                // Recupero della connessione al database
+                string connectionString = _configuration.GetConnectionString("DefaultConnection");
+
+                // Ottenere l'accesso dell'utente dalla sessione
+                var accessoJson = HttpContext.Session.GetString("AccessoUtente");
+                var accesso = JsonConvert.DeserializeObject<AccessoUtente>(accessoJson);
+                var idImmagine = accesso.utente.IdImmagine;
+
+                // Costruire la query dinamica in base al campo dell'immagine selezionato
+                string query = "";
+                if (imageField == "Img1")
                 {
-                    connection.Open();
-                    string query = "UPDATE Immagini SET img1 = @ImageData WHERE IdImmagine = @IdImmagine";
-                    using (SqlCommand command = new SqlCommand(query, connection))
+                    query = "UPDATE Immagini SET img1 = @ImageData WHERE IdImmagine = @IdImmagine";
+                }
+                else if (imageField == "Img2")
+                {
+                    query = "UPDATE Immagini SET img2 = @ImageData WHERE IdImmagine = @IdImmagine";
+                }
+                else if (imageField == "Img3")
+                {
+                    query = "UPDATE Immagini SET img3 = @ImageData WHERE IdImmagine = @IdImmagine";
+                }
+
+                if (!string.IsNullOrEmpty(query))
+                {
+                    // Esegui la query di aggiornamento nel database
+                    using (SqlConnection connection = new SqlConnection(connectionString))
                     {
-                        command.Parameters.AddWithValue("@ImageData", imageData);
-                        command.Parameters.AddWithValue("@IdImmagine", idImmagine);
-                        command.ExecuteNonQuery();
+                        connection.Open();
+                        using (SqlCommand command = new SqlCommand(query, connection))
+                        {
+                            command.Parameters.AddWithValue("@ImageData", imageData);
+                            command.Parameters.AddWithValue("@IdImmagine", idImmagine);
+                            command.ExecuteNonQuery();
+                        }
                     }
                 }
             }
