@@ -24,16 +24,19 @@ namespace LoginStartMenu.Controllers
         {
             var utenteJson = HttpContext.Session.GetString("Utente");
             var ruoloJson = HttpContext.Session.GetString("Ruolo");
+            var immagineJson = HttpContext.Session.GetString("Immagine");
 
             if (!string.IsNullOrEmpty(utenteJson) && !string.IsNullOrEmpty(ruoloJson))
             {
                 var utente = JsonConvert.DeserializeObject<Utente>(utenteJson);
                 var ruolo = JsonConvert.DeserializeObject<Ruolo>(ruoloJson);
+                var immagine = JsonConvert.DeserializeObject<Immagine>(immagineJson);
 
                 AccessoUtente accesso = new AccessoUtente
                 {
                     utente = utente,
-                    ruolo = ruolo
+                    ruolo = ruolo,
+                    immagine = immagine
                 };
 
                 // Salvo l'oggetto accesso nella sessione

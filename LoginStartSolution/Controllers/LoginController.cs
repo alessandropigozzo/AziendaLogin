@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using LoginStartMenu.Models;
 using LoginStartMenu.Models.LoginModels;
 using LoginStartMenu.Models.Entity;
+using Microsoft.EntityFrameworkCore;
 
 namespace LoginStartMenu.Controllers
 {
@@ -77,6 +78,7 @@ namespace LoginStartMenu.Controllers
                     Img1 = null,
                     Img2 = null,
                     Img3 = null,
+                    ImmagineProfilo = null
                 };
 
                 var registrationEntity = new Utente
@@ -182,20 +184,48 @@ namespace LoginStartMenu.Controllers
             {
                 HttpContext.Session.SetString("Utente", "");
                 HttpContext.Session.SetString("Ruolo", "");
+                HttpContext.Session.SetString("Immagine", ""); // Aggiungi questa linea
 
                 Utente utente = _context.Utenti
                     .FirstOrDefault(x => x.Username.ToLower().Trim() == model.Username.ToLower().Trim() &&
                                          x.Password.ToLower().Trim() == model.Password.ToLower().Trim());
+
                 if (utente != null)
                 {
                     var utenteJson = JsonConvert.SerializeObject(utente);
                     HttpContext.Session.SetString("Utente", utenteJson);
 
-                    var ruoloMinimoId = _context.UtentiRuoli
-                    .Where(x => x.IdUtente == utente.IdUtente)
-                    .Min(x => x.Ruolo.IdRuolo);
+                    // Gestione immagine profilo - OTTIMIZZATO
+                    if (utente.IdImmagine > 0)
+                    {
+                        Immagine immagineUtente = _context.Immagini
+                            .FirstOrDefault(x => x.IdImmagine == utente.IdImmagine);
 
-                    // Trova l'utente-ruolo corrispondente al ruolo minimo
+                        if (immagineUtente != null)
+                        {
+                            var jsonSettings = new JsonSerializerSettings
+                            {
+                                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                            };
+                            utente.Immagine = immagineUtente;
+
+                            var immagineJson = JsonConvert.SerializeObject(immagineUtente, jsonSettings);
+                            HttpContext.Session.SetString("Immagine", immagineJson);
+                        }
+                        else
+                        {
+                            HttpContext.Session.SetString("Immagine", "null");
+                        }
+                    }
+                    else
+                    {
+                        HttpContext.Session.SetString("Immagine", "null");
+                    }
+
+                    var ruoloMinimoId = _context.UtentiRuoli
+                        .Where(x => x.IdUtente == utente.IdUtente)
+                        .Min(x => x.Ruolo.IdRuolo);
+
                     var utenteRuolo = _context.UtentiRuoli
                         .Where(x => x.IdUtente == utente.IdUtente && x.Ruolo.IdRuolo == ruoloMinimoId)
                         .Select(ur => new

@@ -47,6 +47,33 @@
     position: relative; /* Imposta una posizione relativa */
 }
 
+
+.passions-conflict-regular {
+    font-family: "Passions Conflict", cursive;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 6rem; /* grande su desktop */
+    color: #d3d3d3;
+    margin-left: 60px;
+    text-align: left;
+    text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.6);
+}
+
+/* Responsività */
+@media (max-width: 768px) {
+    .image {
+        flex-direction: column; /* immagine sopra, nome sotto */
+        align-items: center;
+        text-align: center;
+    }
+
+    .passions-conflict-regular {
+        font-size: 3rem; /* più piccolo su tablet/smartphone */
+        margin-left: 0;
+        margin-top: 20px;
+        text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.6);
+    }
+}
 .image-box {
     width: 250px;
     height: 200px;
@@ -99,8 +126,120 @@ i {
 
 
 
+/* carossello */
+.carousel-indicators-numbers {
+    text-align: center;
+}
 
+.carousel-indicators {
+    position: static;
+    margin: 0;
+}
 
+    .carousel-indicators li {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background-color: #6c757d;
+        color: white;
+        border: 3px solid #6c757d;
+        margin: 0 10px;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        transition: all 0.3s ease;
+    }
+
+        .carousel-indicators li.active {
+            background-color: #007bff;
+            border-color: #007bff;
+            transform: scale(1.1);
+        }
+
+        .carousel-indicators li:hover:not(.active) {
+            background-color: #5a6268;
+            border-color: #5a6268;
+        }
+
+.carousel-item {
+    padding: 30px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    border: 1px solid #e9ecef;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+    .form-group label {
+        font-weight: 600;
+        color: #495057;
+        margin-bottom: 8px;
+    }
+
+.form-control {
+    border-radius: 8px;
+    border: 1px solid #ced4da;
+    padding: 10px 15px;
+    transition: all 0.3s ease;
+}
+
+    .form-control:focus {
+        border-color: #007bff;
+        box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+    }
+
+.skills-section {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    border: 1px solid #e9ecef;
+    height: 100%;
+}
+
+    .skills-section h4 {
+        color: #495057;
+        border-bottom: 2px solid #007bff;
+        padding-bottom: 10px;
+    }
+
+.skill-item span {
+    font-weight: 600;
+    color: #495057;
+}
+
+.progress {
+    border-radius: 10px;
+    background-color: #e9ecef;
+}
+
+.progress-bar {
+    border-radius: 10px;
+}
+
+.bg-purple {
+    background-color: #6f42c1 !important;
+}
+
+.btn {
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-weight: 600;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    border-color: #6c757d;
+}
 
 
 

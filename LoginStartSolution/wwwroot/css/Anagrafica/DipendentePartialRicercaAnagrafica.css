@@ -32,3 +32,31 @@
         .social-icons i:hover {
             color: #000; /* Colore al passaggio del mouse */
         }
+
+
+.passions-conflict-regular {
+    font-family: "Passions Conflict", cursive;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 6rem; /* grande su desktop */
+    color: #d3d3d3;
+    margin-left: 60px;
+    text-align: left;
+    text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.6);
+}
+
+/* Responsività */
+@media (max-width: 768px) {
+    .image {
+        flex-direction: column; /* immagine sopra, nome sotto */
+        align-items: center;
+        text-align: center;
+    }
+
+    .passions-conflict-regular {
+        font-size: 3rem; /* più piccolo su tablet/smartphone */
+        margin-left: 0;
+        margin-top: 20px;
+        text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.6);
+    }
+}

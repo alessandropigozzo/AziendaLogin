@@ -114,6 +114,10 @@ namespace LoginStartMenu.Controllers
                 {
                     query = "UPDATE Immagini SET img3 = @ImageData WHERE IdImmagine = @IdImmagine";
                 }
+                else if (imageField == "ImmagineProfilo")
+                {
+                    query = "UPDATE Immagini SET ImmagineProfilo = @ImageData WHERE IdImmagine = @IdImmagine";
+                }
 
                 if (!string.IsNullOrEmpty(query))
                 {
