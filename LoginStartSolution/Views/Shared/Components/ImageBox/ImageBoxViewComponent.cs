@@ -12,25 +12,14 @@ public class ImageBoxViewComponent : ViewComponent
         _context = context;
     }
 
-    // Modificato per ricevere l'Id dell'utente
- 
 
-        public async Task<IViewComponentResult> InvokeAsync(int userId)
-        {
-            // Recupera l'utente con l'immagine associata
-            var user = await _context.Utenti
-                .Include(u => u.Immagine) // Includo l'immagine associata
-                .FirstOrDefaultAsync(u => u.IdUtente == userId);
+    public async Task<IViewComponentResult> InvokeAsync()
+    {
+        var users = await _context.Utenti
+            .Include(u => u.Immagine)
+            .ToListAsync();
 
-            if (user == null || user.Immagine == null)
-                return Content("Nessun utente o immagine trovata");
-        // Se l'immagine è in formato Base64, la converto in byte[]
-
-        // Se vuoi passare direttamente i dati come stringa Base64
-     //   user.Immagine.Img1 = Convert.ToBase64String(user.Immagine.Img1);
-
-        return View(user.Immagine); // Passa l'immagine alla vista
-        }
-    
+        return View(users);
+    }
 
 }

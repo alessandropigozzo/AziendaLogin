@@ -96,21 +96,31 @@ namespace LoginStartMenu.Controllers
                 _context.Utenti.Add(registrationEntity);
                 _context.SaveChanges();
 
-                // Verifica se il ruolo con IdRuolo = 2 esiste
-                var ruolo = _context.Ruoli.FirstOrDefault(r => r.IdRuolo == 2);
+                bool ruoliEsistenti = _context.Ruoli.Any();
 
-                if (ruolo == null)
+                Ruolo ruolo;
+                if (!ruoliEsistenti)
                 {
-                    // Se il ruolo non esiste, crea un nuovo ruolo
+                    // Se la tabella Ruoli è vuota, crea Admin con IdRuolo = 1
                     ruolo = new Ruolo
                     {
-                        IdRuolo = 2,  // Se l'IdRuolo è manuale, impostalo esplicitamente
-                        NomeRuolo = "Admin" // Imposta il nome del ruolo
+                        IdRuolo = 1,
+                        NomeRuolo = "Admin"
                     };
-
-                    _context.Ruoli.Add(ruolo);
-                    _context.SaveChanges();
                 }
+                else
+                {
+                    // Se ci sono già ruoli, crea User con IdRuolo = 2
+                    ruolo = new Ruolo
+                    {
+                        IdRuolo = 2,
+                        NomeRuolo = "User"
+                    };
+                }
+
+
+                _context.Ruoli.Add(ruolo);
+                _context.SaveChanges();
 
                 // Associa l'utente al ruolo
                 Utente utenteDb = _context.Utenti.Where(x => x.CodiceFiscale.Equals(registrationEntity.CodiceFiscale)).FirstOrDefault();

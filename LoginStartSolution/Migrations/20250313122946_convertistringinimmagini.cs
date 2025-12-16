@@ -10,6 +10,21 @@ namespace LoginStartMenu.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+              name: "UtentiRuoli");
+
+            migrationBuilder.DropTable(
+                name: "Ruoli");
+
+            migrationBuilder.DropTable(
+                name: "Utenti");
+
+            migrationBuilder.DropTable(
+                name: "Anagrafiche");
+
+            migrationBuilder.DropTable(
+                name: "Immagini");
+
             migrationBuilder.CreateTable(
                 name: "Anagrafiche",
                 columns: table => new

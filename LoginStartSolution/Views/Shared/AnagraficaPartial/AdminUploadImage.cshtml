@@ -2,7 +2,7 @@
     <form asp-action="UploadImage" asp-controller="Anagrafica" method="post" enctype="multipart/form-data">
         <!-- Seleziona utente -->
         <div class="col-sm-4 form-group mb-4">
-            <label for="user">Seleziona utente:</label>
+            <label class="mb-1" for="user">Seleziona utente:</label>
             <select name="user" class="form-control">
                 <option value="" disabled selected>- Seleziona utente -</option> <!-- Primo elemento non selezionabile -->
                 @foreach (var utente in ViewBag.utentiList)
@@ -14,7 +14,7 @@
 
         <!-- Seleziona campo immagine -->
         <div class="col-sm-4 form-group mb-4">
-            <label for="imageField">Seleziona campo immagine:</label>
+            <label class="mb-1" for="imageField">Seleziona campo immagine:</label>
             <select name="imageField" class="form-control">
                 <option value="" disabled selected>- Seleziona immagine -</option> <!-- Primo elemento non selezionabile -->
                 <option value="Img1">Img1</option>
@@ -26,7 +26,7 @@
 
         <!-- Seleziona immagine -->
         <div class="col-sm-4 form-group mb-4">
-            <label for="file">Seleziona immagine:</label>
+            <label class="mb-1" for="file">Seleziona immagine:</label>
             <input type="file" name="file" class="form-control" />
         </div>
 

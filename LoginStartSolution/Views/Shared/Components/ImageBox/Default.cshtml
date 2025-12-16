@@ -1,31 +1,88 @@
-﻿@model LoginStartMenu.Models.Entity.Immagine  
-<div style="width: 250px; height: auto; border: 1px solid #ccc; border-radius: 10px; padding: 10px; text-align: center; box-shadow: 2px 2px 5px rgba(0,0,0,0.2);">
-    <h4>Immagini utente</h4>
+﻿@using LoginStartMenu.Models.Entity
+@model IEnumerable<LoginStartMenu.Models.Entity.Utente>
 
-    @if (Model.Img1 != null)
+@{
+    string GetImmagineDaMostrare(Immagine immagine)
     {
-        <img src="data:image/jpeg;base64,@Convert.ToBase64String(Model.Img1)" alt="Immagine 1" style="width: 100%; height: 150px; object-fit: cover; margin-bottom: 5px;">
-    }
-    else
-    {
-        <p>Immagine 1 non disponibile</p>
+        return immagine?.Img1 != null
+            ? $"data:image/jpeg;base64,{Convert.ToBase64String(immagine.Img1)}"
+            : "/placeholder.jpg"; // Immagine di placeholder
     }
 
-    @if (Model.Img2 != null)
+    List<string> GetImmagini(Immagine immagine)
     {
-        <img src="data:image/jpeg;base64,@Convert.ToBase64String(Model.Img2)" alt="Immagine 2" style="width: 100%; height: 150px; object-fit: cover; margin-bottom: 5px;">
+        var immagini = new List<string>();
+        if (immagine == null) return immagini;
+
+        if (immagine.Img1 != null)
+            immagini.Add($"data:image/jpeg;base64,{Convert.ToBase64String(immagine.Img1)}");
+        if (immagine.Img2 != null)
+            immagini.Add($"data:image/jpeg;base64,{Convert.ToBase64String(immagine.Img2)}");
+        if (immagine.Img3 != null)
+            immagini.Add($"data:image/jpeg;base64,{Convert.ToBase64String(immagine.Img3)}");
+
+        return immagini;
     }
-    else
-    {
-        <p>Immagine 2 non disponibile</p>
+}
+
+<style>
+    .user-gallery {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        padding: 20px;
     }
 
-    @if (Model.Img3 != null)
-    {
-        <img src="data:image/jpeg;base64,@Convert.ToBase64String(Model.Img3)" alt="Immagine 3" style="width: 100%; height: 150px; object-fit: cover;">
+    .image-box {
+        width: 250px;
+        height: 250px;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        overflow: hidden;
+        position: relative;
+        background-color: #f0f0f0; /* Placeholder */
     }
-    else
+
+    .user-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover; /* Mantiene le proporzioni */
+        transition: opacity 0.3s;
+    }
+</style>
+
+<div class="user-gallery">
+    @foreach (var user in Model)
     {
-        <p>Immagine 3 non disponibile</p>
+        var immagini = GetImmagini(user.Immagine);
+        var primaImmagine = GetImmagineDaMostrare(user.Immagine);
+
+        <div class="image-box"
+             onmouseover="startSlideshow(this)"
+             onmouseout="stopSlideshow(this)">
+            <img class="user-image"
+                 src="@primaImmagine"
+                 alt="@user.Username"
+                 data-images='@Json.Serialize(immagini)'>
+        </div>
     }
 </div>
+
+<script>
+    function startSlideshow(element) {
+        const imgElement = element.querySelector('.user-image');
+        const images = JSON.parse(imgElement.dataset.images);
+
+        if (images.length < 2) return;
+
+        let index = 0;
+        element.slideshowInterval = setInterval(() => {
+            index = (index + 1) % images.length;
+            imgElement.src = images[index];
+        }, 2000);
+    }
+
+    function stopSlideshow(element) {
+        clearInterval(element.slideshowInterval);
+    }
+</script>

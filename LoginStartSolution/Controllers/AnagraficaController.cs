@@ -7,7 +7,6 @@ using Microsoft.Data.SqlClient;
 using System;
 using System.Data.SqlClient;
 using System.IO;
-using LoginStartMenu.Models.Collection;
 
 
 namespace LoginStartMenu.Controllers
@@ -75,32 +74,20 @@ namespace LoginStartMenu.Controllers
         {
             if (file != null && file.Length > 0)
             {
-                // Salvataggio del file fisico nella cartella 'wwwroot/img'
-                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "img", file.FileName);
-                using (var stream = new FileStream(filePath, FileMode.Create))
-                {
-                    file.CopyTo(stream);
-                }
-
-                // Leggere il file come array di byte
                 byte[] imageData;
-                using (var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read))
+                using (var memoryStream = new MemoryStream())
                 {
-                    using (var binaryReader = new BinaryReader(fileStream))
-                    {
-                        imageData = binaryReader.ReadBytes((int)fileStream.Length);
-                    }
+                    file.CopyTo(memoryStream);
+                    imageData = memoryStream.ToArray(); 
                 }
 
-                // Recupero della connessione al database
                 string connectionString = _configuration.GetConnectionString("DefaultConnection");
 
-                // Ottenere l'accesso dell'utente dalla sessione
-                var accessoJson = HttpContext.Session.GetString("AccessoUtente");
-                var accesso = JsonConvert.DeserializeObject<AccessoUtente>(accessoJson);
-                var idImmagine = accesso.utente.IdImmagine;
+                if (string.IsNullOrEmpty(user))
+                {
+                    return BadRequest("Errore: ID utente non valido.");
+                }
 
-                // Costruire la query dinamica in base al campo dell'immagine selezionato
                 string query = "";
                 if (imageField == "Img1")
                 {
@@ -121,21 +108,24 @@ namespace LoginStartMenu.Controllers
 
                 if (!string.IsNullOrEmpty(query))
                 {
-                    // Esegui la query di aggiornamento nel database
                     using (SqlConnection connection = new SqlConnection(connectionString))
                     {
                         connection.Open();
                         using (SqlCommand command = new SqlCommand(query, connection))
                         {
                             command.Parameters.AddWithValue("@ImageData", imageData);
-                            command.Parameters.AddWithValue("@IdImmagine", idImmagine);
+                            command.Parameters.AddWithValue("@IdImmagine", user); 
                             command.ExecuteNonQuery();
                         }
                     }
                 }
+
+                return RedirectToAction("UploadImage");
             }
-            return RedirectToAction("UploadImage");
+
+            return BadRequest("Nessun file selezionato.");
         }
+
 
     }
 }
